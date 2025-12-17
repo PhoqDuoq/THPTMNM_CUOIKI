@@ -17,10 +17,19 @@ jobs:
       with:
         node-version: '18'
 
+    # SỬA LẠI: Phải đi vào thư mục backend mới cài được
     - name: Install Backend Dependencies
-      run: npm install
+      run: |
+        cd backend
+        npm install
 
+    # SỬA LẠI: Đường dẫn file server.js giờ nằm trong backend
     - name: Check Syntax
       run: |
-        node -c server.js
+        node -c backend/server.js
         echo "Code backend OK!"
+        
+    - name: Docker Build Test (Optional)
+      run: |
+        docker compose config
+        echo "File docker-compose.yml hop le!"
