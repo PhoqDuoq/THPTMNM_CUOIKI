@@ -1,0 +1,19 @@
+# File: docker-compose.yml
+version: '3.8'
+
+services:
+  # Cấu hình cho Backend
+  backend-service:
+    build: ./backend        # Lấy code và Dockerfile từ thư mục backend
+    ports:
+      - "3000:3000"         # Nối cổng 3000 của máy bạn vào cổng 3000 của Docker
+    container_name: my-backend
+
+  # Cấu hình cho Frontend
+  frontend-service:
+    build: ./frontend       # Lấy code và Dockerfile từ thư mục frontend
+    ports:
+      - "8080:80"           # Nối cổng 8080 của máy bạn vào cổng 80 của Nginx
+    container_name: my-frontend
+    depends_on:
+      - backend-service     # Chờ backend chạy trước rồi mới chạy frontend

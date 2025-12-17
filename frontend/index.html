@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Cuối Kỳ - Demo CI/CD</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        .card { 
+            border: 1px solid #ddd; padding: 20px; margin-top: 20px; 
+            border-radius: 8px; max-width: 400px; margin-left: auto; margin-right: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button { 
+            padding: 10px 20px; background: #007bff; color: white; 
+            border: none; cursor: pointer; border-radius: 4px; font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        ul { list-style: none; padding: 0; }
+        li { background: #f9f9f9; margin: 5px 0; padding: 10px; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <h1>FRONTEND DEMO</h1>
+    <p>Bấm nút dưới để lấy dữ liệu từ Backend (Node.js)</p>
+    
+    <button onclick="fetchUsers()">📥 Tải Danh Sách User</button>
+    
+    <div id="result" class="card">
+        Dữ liệu chưa tải...
+    </div>
+
+    <script>
+        async function fetchUsers() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "⏳ Đang kết nối server...";
+            
+            try {
+                // Gọi vào Backend đang chạy ở port 3000
+                const response = await fetch('http://localhost:3000/api/users');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Hiển thị dữ liệu lên màn hình
+                let html = `<h3 style="color:green">${data.message}</h3><ul>`;
+                data.data.forEach(user => {
+                    html += `<li><strong>${user.name}</strong> <br> <small>Role: ${user.role}</small></li>`;
+                });
+                html += "</ul>";
+                
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color:red">❌ Lỗi: Không kết nối được Backend!<br>Hãy chắc chắn cửa sổ Terminal backend vẫn đang chạy.</p>`;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
